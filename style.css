@@ -1,0 +1,107 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0e6ec;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+.container {
+    background-color: #ffffff;
+    border-radius: 0;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    margin-top: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: #556c80;
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: normal;
+    text-align: left;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.profile-image {
+    text-align: center;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 200px;
+}
+
+.profile-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 0;
+    object-fit: cover;
+    border: none;
+}
+
+.profile-details {
+    width: 100%;
+}
+
+.profile-details h2 {
+    font-size: 16px;
+    color: #333;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    border-bottom: 1px dotted #ccc;
+    padding-bottom: 3px;
+}
+
+.detail-group {
+    display: flex;
+    margin-bottom: 5px;
+    font-size: 13px;
+    line-height: 1.4;
+    /* align-items: flex-start;  // Pastikan item sejajar di bagian atas baris */
+}
+
+.detail-group .label {
+    /* Menggunakan lebar tetap dan posisi relatif */
+    flex: 0 0 160px; /* Sesuaikan lebar ini sesuai kebutuhan agar titik dua sejajar */
+    color: #555;
+    font-weight: normal;
+    padding-right: 10px;
+    text-align: left;
+    /* white-space: nowrap; // Hapus ini agar label panjang bisa melipat */
+    position: relative;
+    /* Untuk memastikan teks melipat jika terlalu panjang */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.detail-group .label::after {
+    content: ":";
+    position: absolute;
+    right: 5px; /* Sesuaikan posisi ini agar titik dua berada di ujung lebar tetap */
+    top: 0; /* Pastikan titik dua sejajar dengan bagian atas baris pertama label */
+}
+
+.detail-group .value {
+    flex: 1;
+    color: #333;
+    word-wrap: break-word;
+    overflow-wrap: break-word; /* Untuk kompatibilitas browser */
+    margin-left: 10px; /* Sesuaikan jarak dari titik dua */
+    font-weight: bold;
+}
