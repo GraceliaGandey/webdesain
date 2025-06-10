@@ -1,0 +1,242 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    /* Warna latar belakang dari gambar kedua */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    /* Align ke atas */
+    min-height: 100vh;
+    box-sizing: border-box;
+    /* Pastikan padding tidak menambah ukuran */
+}
+
+.container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    /* Tambahkan sedikit radius sudut seperti di gambar kedua */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* Sesuaikan shadow */
+    width: 95%;
+    /* Fleksibel */
+    max-width: 700px;
+    /* Lebar container yang lebih sesuai dengan gambar kedua */
+    margin-top: 60px;
+    /* Memberi ruang di bawah header biru (jika header biru juga digunakan) */
+    overflow: hidden;
+    padding: 0;
+    /* Hapus padding dari container karena sudah ada di header dan profile-content-wrapper */
+}
+
+header {
+    background-color: #366085;
+    /* Warna biru pada bar atas seperti gambar kedua */
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    /* Judul 'My Profile' di header lebih tebal di gambar */
+    text-align: left;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* header ini bertindak sebagai bar atas biru di gambar */
+    position: fixed;
+    /* Membuat header tetap di atas saat scroll */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;
+    height: 40px;
+    /* Sesuaikan tinggi header */
+    display: flex;
+    align-items: center;
+    /* Pusatkan teks My Profile */
+}
+
+header h1 {
+    margin: 0;
+    /* Hapus margin default h1 */
+    font-size: 18px;
+    /* Sesuaikan ukuran font h1 di header */
+    font-weight: bold;
+}
+
+.profile-content-wrapper {
+    /* Menggantikan .profile-content untuk tata letak flex */
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    /* Memungkinkan wrap pada layar kecil */
+    gap: 20px;
+    /* Spasi antar kolom */
+}
+
+.profile-image {
+    flex: 0 0 200px;
+    /* Lebar tetap 200px untuk gambar */
+    max-width: 200px;
+    /* Pastikan tidak melebihi 200px */
+    text-align: center;
+    padding-right: 10px;
+    /* Spasi antara gambar dan detail */
+    box-sizing: border-box;
+    /* margin-bottom: 20px; /* Hapus margin-bottom di sini jika ini bagian dari flex row */
+}
+
+.profile-image img {
+    width: 100%;
+    height: 200px;
+    /* Tinggi tetap agar gambar persegi seperti di gambar kedua */
+    object-fit: cover;
+    /* Pastikan gambar mengisi area tanpa distorsi */
+    border-radius: 8px;
+    /* Tambahkan sedikit radius sudut pada gambar */
+    border: 1px solid #ccc;
+    /* Border tipis seperti di gambar */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Tambahkan shadow pada gambar */
+}
+
+.profile-details {
+    flex: 1;
+    /* Ambil sisa ruang */
+    min-width: 350px;
+    /* Lebar minimum agar detail tidak terlalu sempit */
+}
+
+.profile-details h2 {
+    font-size: 16px;
+    color: #333;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    border-bottom: 1px dotted #ccc;
+    padding-bottom: 3px;
+}
+
+.detail-group {
+    display: flex;
+    margin-bottom: 5px;
+    font-size: 13px;
+    line-height: 1.4;
+    align-items: baseline;
+    /* Pastikan item sejajar di bagian bawah baris teks */
+}
+
+.detail-group .label {
+    /* Lebar tetap untuk label, ini kunci penyelarasan */
+    /* Sesuaikan nilai 160px ini jika label terpanjang masih tidak sejajar */
+    flex: 0 0 160px;
+    /* Nilai dari CSS Anda, disesuaikan sedikit */
+    color: #555;
+    font-weight: normal;
+    /* Font normal untuk label */
+    padding-right: 5px;
+    /* Spasi sebelum titik dua */
+    text-align: left;
+    position: relative;
+    /* Penting untuk posisi absolut ::after */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.detail-group .label::after {
+    content: ":";
+    /* Tambahkan titik dua */
+    position: absolute;
+    /* Posisikan secara absolut */
+    right: 0;
+    /* Di ujung paling kanan dari area yang ditempati oleh label */
+    top: 0;
+    /* Sejajar dengan bagian atas baris pertama label */
+    font-weight: normal;
+    /* Pastikan titik dua tidak bold */
+}
+
+.detail-group .value {
+    flex: 1;
+    /* Mengambil sisa ruang */
+    color: #333;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    /* Untuk kompatibilitas browser */
+    margin-left: 10px;
+    /* Sesuaikan jarak dari titik dua */
+    font-weight: normal;
+    /* Nilai tidak tebal seperti di gambar kedua */
+}
+
+
+/* Responsif untuk layar lebih kecil */
+
+@media (max-width: 768px) {
+    .container {
+        border-radius: 0;
+        /* Hapus radius di mobile jika ingin full width */
+        margin-top: 40px;
+        /* Sesuaikan margin top untuk header mobile */
+        max-width: 100%;
+        /* Lebar penuh di mobile */
+    }
+    header {
+        height: 35px;
+        /* Tinggi header lebih kecil di mobile */
+        font-size: 16px;
+        padding: 8px 15px;
+    }
+    header h1 {
+        font-size: 16px;
+    }
+    .profile-content-wrapper {
+        flex-direction: column;
+        /* Ubah tata letak menjadi kolom */
+        align-items: center;
+        /* Pusatkan item saat dalam kolom */
+        padding: 15px;
+        /* Sesuaikan padding */
+    }
+    .profile-image {
+        width: 100%;
+        max-width: 150px;
+        /* Batasi ukuran gambar pada mobile */
+        height: auto;
+        margin-bottom: 20px;
+        padding-right: 0;
+        /* Hapus padding kanan */
+    }
+    .profile-image img {
+        height: 150px;
+        /* Sesuaikan tinggi gambar di mobile */
+    }
+    .profile-details {
+        min-width: unset;
+        /* Hapus min-width */
+        width: 100%;
+    }
+    .detail-group {
+        flex-direction: column;
+        /* Ubah detail menjadi tumpukan label di atas nilai */
+        align-items: flex-start;
+        margin-bottom: 10px;
+        /* Tambah spasi saat bertumpuk */
+    }
+    .detail-group .label {
+        width: 100%;
+        margin-bottom: 2px;
+        /* Spasi kecil antara label dan nilai */
+        padding-right: 0;
+        text-align: left;
+        position: static;
+        /* Kembali ke posisi normal di mobile */
+    }
+    .detail-group .label::after {
+        content: "";
+        /* Hapus titik dua di mobile saat label bertumpuk */
+    }
+    .detail-group .value {
+        margin-left: 0;
+        /* Hapus margin-left */
+    }
+}

@@ -1,133 +1,35 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile</title>
+    <title>Login - Universitas Klabat</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="container">
-        <header>
-            <h1>My Profile</h1>
-        </header>
-        <div class="profile-content">
-            <div class="profile-image">
-                <img src="./asset/images/picture.jpeg" alt="Profile Picture">
+    <div class="login-container">
+        <div class="login-box">
+            <img src="unklab_logo.png" alt="Universitas Klabat" class="logo">
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
                 </div>
-            <div class="profile-details">
-                <div class="detail-group">
-                    <div class="label">Registration Number/ NIM</div>
-                    <div class="value">S22229024 / 105022410036</div>
+                <div class="input-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                    <img src="lock_icon.png" alt="Lock Icon" class="lock-icon">
                 </div>
-                <div class="detail-group">
-                    <div class="label">Name</div>
-                    <div class="value">Gandey, Gracella</div>
+                <div class="buttons">
+                    <button type="submit" class="login-btn">Login</button>
+                    <button type="button" class="reset-btn">Reset Session</button>
                 </div>
-                <div class="detail-group">
-                    <div class="label">Program</div>
-                    <div class="value">Normal Program</div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Name in IJAZAH</div>
-                    <div class="value">Gracelia Gandey</div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Financial Number</div>
-                    <div class="value">S22229024</div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Gender</div>
-                    <div class="value">Female</div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Place/ Date of Birth</div>
-                    <div class="value">Kuyanga, 2005-09-20</div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Academic Status/ Curriculum Block</div>
-                    <div class="value">Active/ Unblock</div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Religion</div>
-                    <div class="value">Kristen Advent</div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Residence</div>
-                    <div class="value">Jasmine 2 Dormitory</div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Marital status</div>
-                    <div class="value">Single</div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Faculty</div>
-                    <div class="value">Fakultas Ilmu Komputer</div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Program Study/ Minor</div>
-                    <div class="value">Informatika/-</div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Curriculum Name</div>
-                    <div class="value">Informatika 2024-2028</div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Academic Probation</div>
-                    <div class="value"></div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Race</div>
-                    <div class="value">Minahasa</div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Address</div>
-                    <div class="value">Kuyanga Satu kecamatan Tombatu Utara, Minahasa Tenggara, Sulawesi Utara, Indonesia</div>
-                </div>
-
-                <h2>My Mother</h2>
-                <div class="detail-group">
-                    <div class="label">Name</div>
-                    <div class="value">Novel Tampomuri</div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Address</div>
-                    <div class="value">Kuyanga Satu kecamatan Tombatu Utara</div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Phone</div>
-                    <div class="value"></div>
-                </div>
-
-                <h2>My Father</h2>
-                <div class="detail-group">
-                    <div class="label">Name</div>
-                    <div class="value">Noldi Gandey</div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Address</div>
-                    <div class="value">Kuyanga Satu kecamatan Tombatu Utara</div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Phone</div>
-                    <div class="value"></div>
-                </div>
-
-                <h2>My Guardian</h2>
-                <div class="detail-group">
-                    <div class="label">Name</div>
-                    <div class="value"></div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Address</div>
-                    <div class="value"></div>
-                </div>
-                <div class="detail-group">
-                    <div class="label">Phone</div>
-                    <div class="value"></div>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
+    <script src="script.js"></script>
 </body>
+
 </html>
