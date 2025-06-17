@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background-color: #007bff;
+            /* A common blue for headers */
+            color: white;
+            padding: 10px 20px;
+            text-align: right;
+            font-size: 0.9em;
+        }
+        
+        .container {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 15px 0;
+            margin-right: 20px;
+            min-height: 500px;
+            /* Tambahkan min-height agar sidebar cukup tinggi */
+        }
+        
+        .sidebar-header {
+            background-color: #6c757d;
+            /* Darker blue-grey for the Academic header */
+            color: white;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar ul li a {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .sidebar ul li:last-child a {
+            border-bottom: none;
+            /* Hapus border bawah pada item terakhir */
+        }
+        
+        .sidebar ul li a.active,
+        .sidebar ul li a:hover {
+            background-color: #e9e9e9;
+        }
+        /* --- Styling for Main Content Areas --- */
+        
+        .main-content {
+            flex: 1;
+            background-color: #fff;
+            /* Latar belakang putih untuk area konten utama */
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            /* Tambahkan scroll jika konten terlalu panjang */
+            max-height: calc(100vh - 80px);
+            /* Sesuaikan tinggi agar scroll berfungsi dengan baik */
+        }
+        /* Hide content sections by default */
+        
+        .content-section {
+            display: none;
+        }
+        /* Show active content section */
+        
+        .content-section.active {
+            display: block;
+        }
+        /* Styles for info boxes (Home content) */
+        
+        .info-box {
+            background-color: #fff3cd;
+            /* Yellowish for warning/info */
+            border-left: 5px solid #ffc107;
+            /* Orange border */
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            color: #856404;
+        }
+        
+        .info-box.academic-blue {
+            background-color: #d1ecf1;
+            /* Light blue for academic message */
+            border-left: 5px solid #17a2b8;
+            /* Teal border */
+            color: #0c5460;
+        }
+        
+        .info-box.siu-green {
+            background-color: #d4edda;
+            /* Light green for success/SIU message */
+            border-left: 5px solid #28a745;
+            /* Green border */
+            color: #155724;
+        }
+        
+        .info-box h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: inherit;
+        }
+        
+        .info-box a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .info-box a:hover {
+            text-decoration: underline;
+        }
+        /* Styles for Profile content */
+        
+        .profile-container {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            /* Override background dari body */
+            border-radius: 0;
+            /* Override border-radius dari body */
+            box-shadow: none;
+            /* Hapus shadow jika main-content sudah punya */
+            width: 100%;
+            max-width: none;
+            /* Agar mengambil lebar penuh dari main-content */
+            margin-top: 0;
+            overflow: hidden;
+            display: flex;
+            /* Tetap flex untuk child profile-image dan profile-details */
+            flex-direction: column;
+        }
+        
+        .profile-container header {
+            background-color: #556c80;
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: normal;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .profile-content-inner {
+            /* Nama baru untuk menghindari konflik dengan .profile-content global */
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .profile-image {
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 200px;
+            align-self: center;
+            /* Pusatkan gambar di dalam flex container */
+        }
+        
+        .profile-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 0;
+            object-fit: cover;
+            border: none;
+        }
+        
+        .profile-details {
+            width: 100%;
+        }
+        
+        .profile-details h2 {
+            font-size: 16px;
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            font-weight: bold;
+            border-bottom: 1px dotted #ccc;
+            padding-bottom: 3px;
+        }
+        
+        .detail-group {
+            display: flex;
+            margin-bottom: 5px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        .detail-group .label {
+            flex: 0 0 160px;
+            color: #555;
+            font-weight: normal;
+            padding-right: 10px;
+            text-align: left;
+            position: relative;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .detail-group .label::after {
+            content: ":";
+            position: absolute;
+            right: 5px;
+            top: 0;
+        }
+        
+        .detail-group .value {
+            flex: 1;
+            color: #333;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+        /* --- Styles for Registration Form (from your provided code) --- */
+        
+        .registration-form-container {
+            /* New wrapper for your form content */
+            padding: 0;
+            /* Remove padding here, main-content already has it */
+            background-color: #fff;
+            /* Ensure white background for the form itself */
+        }
+        
+        .registration-form-container h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            /* Lebih konsisten dengan spacing Bootstrap */
+        }
+        /* New styles for fieldset to look like Bootstrap cards */
+        
+        .registration-form-container fieldset {
+            border: 1px solid #dee2e6;
+            /* Border mirip card */
+            padding: 1.25rem;
+            /* Padding mirip card-body */
+            margin-bottom: 1.5rem;
+            /* Jarak antar fieldset */
+            border-radius: 0.25rem;
+            /* Sudut membulat */
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            /* Bayangan */
+        }
+        
+        .registration-form-container legend {
+            float: none;
+            /* Hilangkan float default legend */
+            width: auto;
+            /* Sesuaikan lebar */
+            padding: 0 0.5rem;
+            /* Padding horizontal */
+            margin-left: -0.5rem;
+            /* Geser ke kiri agar overlap border */
+            font-size: 1.15rem;
+            /* Ukuran font lebih besar dari label tapi lebih kecil dari h4 */
+            font-weight: bold;
+            color: #007bff;
+            /* Warna biru untuk judul bagian */
+            border-bottom: none;
+            /* Hilangkan border bawah default */
+        }
+        
+        .registration-form-container .form-label {
+            font-weight: 500;
+        }
+        
+        .registration-digit-input {
+            width: 30px;
+            height: 38px;
+            text-align: center;
+            padding: 0.375rem 0.25rem;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            margin-right: 5px;
+            display: inline-block;
+            -moz-appearance: textfield;
+            /* Hide arrows for type="number" in Firefox */
+        }
+        /* Hide arrows for type="number" in Chrome, Safari, Edge, Opera */
+        
+        .registration-digit-input::-webkit-outer-spin-button,
+        .registration-digit-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        .registration-digits-wrapper .registration-digit-input:last-child {
+            margin-right: 0;
+        }
+        /* Adjustments for the new fieldset structure */
+        
+        .registration-form-container .registration-digits-wrapper {
+            margin-bottom: 1rem;
+            /* Add some space below the digits wrapper */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        Maximum Max
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                Academic
+            </div>
+            <ul>
+                <li><a href="#" data-content="home" class="active">Beranda</a></li>
+                <li><a href="#" data-content="registration">Registration</a></li>
+                <li><a href="#" data-content="profile">Profile</a></li>
+                <li><a href="#" data-content="schedule">View Schedule</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <div id="home-content" class="content-section active">
+                <div class="info-box">
+                    <h4>⚠️ Academic</h4>
+                    <p>Maksimum waktu untuk setiap mahasiswa menyelesaikan perkuliahan di satu program studi adalah tujuh (7) tahun terhitung sejak mahasiswa tersebut terdaftar pada program studi. Informasi lebih lanjut dapat dilihat melalui tautan <a href="#">Aturan dan Keputusan</a></p>
+                </div>
+                <div class="info-box academic-blue">
+                    <h4>💬 Academic</h4>
+                    <p>Periksa kembali jadwal perkuliahan anda sebelum mengikuti perkuliahan. (Please re-check your schedule before class start)</p>
+                </div>
+                <div class="info-box siu-green">
+                    <h4>✅ SIU</h4>
+                    <p>Welcome back Gandey, Gracelia, it's nice to meet you again. This is your last activity using this system:<br>Last login date: 2025-06-17 13:56:34</p>
+                </div>
+            </div>
+
+            <div id="profile-content" class="content-section">
+                <div class="profile-container">
+                    <header>
+                        <h1>My Profile</h1>
+                    </header>
+                    <div class="profile-content-inner">
+                        <div class="profile-image">
+                            <img src="WhatsApp Image 2025-06-17 at 12.46.08.jpeg" alt="Profile Picture">
+                        </div>
+                        <div class="profile-details">
+                            <div class="detail-group">
+                                <div class="label">Registration Number/ NIM</div>
+                                <div class="value">S22229024 / 105022410036</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Name</div>
+                                <div class="value">Gandey, Gracella</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Program</div>
+                                <div class="value">Normal Program</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Name in IJAZAH</div>
+                                <div class="value">Gracelia Gandey</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Financial Number</div>
+                                <div class="value">S22229024</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Gender</div>
+                                <div class="value">Female</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Place/ Date of Birth</div>
+                                <div class="value">Kuyanga, 2005-09-20</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Academic Status/ Curriculum Block</div>
+                                <div class="value">Active/ Unblock</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Religion</div>
+                                <div class="value">Kristen Advent</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Residence</div>
+                                <div class="value">Jasmine 2 Dormitory</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Marital status</div>
+                                <div class="value">Single</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Faculty</div>
+                                <div class="value">Fakultas Ilmu Komputer</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Program Study/ Minor</div>
+                                <div class="value">Informatika/-</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Curriculum Name</div>
+                                <div class="value">Informatika 2024-2028</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Academic Probation</div>
+                                <div class="value"></div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Race</div>
+                                <div class="value">Minahasa</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Address</div>
+                                <div class="value">Kuyanga Satu kecamatan Tombatu Utara, Minahasa Tenggara, Sulawesi Utara, Indonesia</div>
+                            </div>
+
+                            <h2>My Mother</h2>
+                            <div class="detail-group">
+                                <div class="label">Name</div>
+                                <div class="value">Novel Tampomuri</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Address</div>
+                                <div class="value">Kuyanga Satu kecamatan Tombatu Utara</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Phone</div>
+                                <div class="value"></div>
+                            </div>
+
+                            <h2>My Father</h2>
+                            <div class="detail-group">
+                                <div class="label">Name</div>
+                                <div class="value">Noldi Gandey</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Address</div>
+                                <div class="value">Kuyanga Satu kecamatan Tombatu Utara</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Phone</div>
+                                <div class="value"></div>
+                            </div>
+
+                            <h2>My Guardian</h2>
+                            <div class="detail-group">
+                                <div class="label">Name</div>
+                                <div class="value"></div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Address</div>
+                                <div class="value"></div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">Phone</div>
+                                <div class="value"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="registration-content" class="content-section">
+                <form id="registrationForm" class="registration-form-container">
+                    <h4 class="text-center mb-4">UNKLAB New Student Registration Form</h4>
+
+                    <fieldset>
+                        <legend>Registration Number</legend>
+                        <div class="registration-digits-wrapper">
+                            <input type="text" class="registration-digit-input" maxlength="1" pattern="[0-9]" autocomplete="off" required>
+                            <input type="text" class="registration-digit-input" maxlength="1" pattern="[0-9]" autocomplete="off" required>
+                            <input type="text" class="registration-digit-input" maxlength="1" pattern="[0-9]" autocomplete="off" required>
+                            <input type="text" class="registration-digit-input" maxlength="1" pattern="[0-9]" autocomplete="off" required>
+                            <input type="text" class="registration-digit-input" maxlength="1" pattern="[0-9]" autocomplete="off" required>
+                            <input type="text" class="registration-digit-input" maxlength="1" pattern="[0-9]" autocomplete="off" required>
+                            <input type="text" class="registration-digit-input" maxlength="1" pattern="[0-9]" autocomplete="off" required>
+                            <input type="text" class="registration-digit-input" maxlength="1" pattern="[0-9]" autocomplete="off" required>
+                            <input type="text" class="registration-digit-input" maxlength="1" pattern="[0-9]" autocomplete="off" required>
+                            <input type="text" class="registration-digit-input" maxlength="1" pattern="[0-9]" autocomplete="off" required>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Personal Information</legend>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="fullName" class="form-label">Full Name :</label>
+                                <input type="text" class="form-control" id="fullName" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="dateOfBirth" class="form-label">Date of Birth :</label>
+                                <input type="text" class="form-control date-picker" id="dateOfBirth" placeholder="dd/mm/yyyy" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="birthplace" class="form-label">Place of Birth :</label>
+                                <input type="text" class="form-control" id="birthplace" required>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label d-block">Gender :</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="male" value="male" required>
+                                    <label class="form-check-label" for="male">Male</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="female" value="female" required>
+                                    <label class="form-check-label" for="female">Female</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label d-block">Blood Type :</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="bloodType" id="bloodA" value="A" required>
+                                    <label class="form-check-label" for="bloodA">A</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="bloodType" id="bloodB" value="B" required>
+                                    <label class="form-check-label" for="bloodB">B</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="bloodType" id="bloodAB" value="AB" required>
+                                    <label class="form-check-label" for="bloodAB">AB</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="bloodType" id="bloodO" value="O" required>
+                                    <label class="form-check-label" for="bloodO">O</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label for="tribe" class="form-label">Ethnicity :</label>
+                                <input type="text" class="form-control" id="tribe" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="personalEmail" class="form-label">Email :</label>
+                                <input type="email" class="form-control" id="personalEmail" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="personalMobileNumber" class="form-label">Mobile Number :</label>
+                                <input type="tel" class="form-control" id="personalMobileNumber" required pattern="[0-9]{8,15}" title="Please enter a valid phone number (8-15 digits)">
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label for="telephoneNumber" class="form-label">Telephone Number :</label>
+                                <input type="tel" class="form-control" id="telephoneNumber" pattern="[0-9]{7,15}" title="Please enter a valid phone number (7-15 digits)">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="religion" class="form-label">Religion :</label>
+                                <select class="form-select" id="religion" required>
+                                    <option value="" disabled selected>Select Religion</option>
+                                    <option value="Advent">Adventist</option>
+                                    <option value="Islam">Islam</option>
+                                    <option value="Kristen Protestan">Protestant Christian</option>
+                                    <option value="Kristen Katolik">Catholic Christian</option>
+                                    <option value="Hindu">Hindu</option>
+                                    <option value="Buddha">Buddhist</option>
+                                    <option value="Konghucu">Confucian</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="status" class="form-label">Marital Status :</label>
+                                <select class="form-select" id="status" required>
+                                    <option value="" disabled selected>Select Status</option>
+                                    <option value="Single">Single</option>
+                                    <option value="Married">Married</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Home Address</legend>
+                        <div class="mb-3">
+                            <label for="homeAddress" class="form-label">Address :</label>
+                            <textarea class="form-control" id="homeAddress" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="homePostalCode" class="form-label">Postal Code :</label>
+                            <input type="text" class="form-control" id="homePostalCode" pattern="[0-9]{5}" maxlength="5" title="Postal code must be 5 digits" required>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>School Information</legend>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="highSchoolName" class="form-label">High School Name :</label>
+                                <input type="text" class="form-control" id="highSchoolName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="schoolTelephoneNumber" class="form-label">School Telephone Number :</label>
+                                <input type="tel" class="form-control" id="schoolTelephoneNumber" pattern="[0-9]{7,15}" title="Please enter a valid phone number (7-15 digits)">
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="program" class="form-label">Program :</label>
+                                <input type="text" class="form-control" id="program" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="schoolAddress" class="form-label">School Address :</label>
+                            <textarea class="form-control" id="schoolAddress" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="schoolPostalCode" class="form-label">School Postal Code :</label>
+                            <input type="text" class="form-control" id="schoolPostalCode" pattern="[0-9]{5}" maxlength="5" title="Postal code must be 5 digits" required>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Parent Information</legend>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="fatherName" class="form-label">Father's Name :</label>
+                                <input type="text" class="form-control" id="fatherName" required>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label for="fatherMobileNumber" class="form-label">Father's Mobile Number :</label>
+                                <input type="tel" class="form-control" id="fatherMobileNumber" required pattern="[0-9]{8,15}" title="Please enter a valid phone number (8-15 digits)">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="fatherEmail" class="form-label">Father's Email :</label>
+                                <input type="email" class="form-control" id="fatherEmail">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="fatherReligion" class="form-label">Father's Religion :</label>
+                                <select class="form-select" id="fatherReligion" required>
+                                    <option value="" disabled selected>Select Religion</option>
+                                    <option value="Advent">Adventist</option>
+                                    <option value="Islam">Islam</option>
+                                    <option value="Kristen Protestan">Protestant Christian</option>
+                                    <option value="Kristen Katolik">Catholic Christian</option>
+                                    <option value="Hindu">Hindu</option>
+                                    <option value="Buddha">Buddhist</option>
+                                    <option value="Konghucu">Confucian</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label for="fatherEducation" class="form-label">Father's Education :</label>
+                                <select class="form-select" id="fatherEducation" required>
+                                    <option value="" disabled selected>Select Education</option>
+                                    <option>Elementary School</option>
+                                    <option>Junior High School</option>
+                                    <option>Senior High School</option>
+                                    <option>Bachelor's Degree</option>
+                                    <option>Master's Degree</option>
+                                    <option>Doctorate Degree</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="motherName" class="form-label">Mother's Name :</label>
+                                <input type="text" class="form-control" id="motherName" required>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label for="motherMobileNumber" class="form-label">Mother's Mobile Number :</label>
+                                <input type="tel" class="form-control" id="motherMobileNumber" required pattern="[0-9]{8,15}" title="Please enter a valid phone number (8-15 digits)">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="motherEmail" class="form-label">Mother's Email :</label>
+                                <input type="email" class="form-control" id="motherEmail">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="motherReligion" class="form-label">Mother's Religion :</label>
+                                <select class="form-select" id="motherReligion" required>
+                                    <option value="" disabled selected>Select Religion</option>
+                                    <option value="Advent">Adventist</option>
+                                    <option value="Islam">Islam</option>
+                                    <option value="Kristen Protestan">Protestant Christian</option>
+                                    <option value="Kristen Katolik">Catholic Christian</option>
+                                    <option value="Hindu">Hindu</option>
+                                    <option value="Buddha">Buddhist</option>
+                                    <option value="Konghucu">Confucian</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label for="motherEducation" class="form-label">Mother's Education :</label>
+                                <select class="form-select" id="motherEducation" required>
+                                    <option value="" disabled selected>Select Education</option>
+                                    <option>Elementary School</option>
+                                    <option>Junior High School</option>
+                                    <option>Senior High School</option>
+                                    <option>Bachelor's Degree</option>
+                                    <option>Master's Degree</option>
+                                    <option>Doctorate Degree</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Guardian Information</legend>
+                        <p class="text-muted mb-3">Isi bagian ini hanya jika Anda memiliki wali selain orang tua.</p>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="parentCareFullName" class="form-label">Guardian's Full Name :</label>
+                                <input type="text" class="form-control" id="parentCareFullName">
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label for="familyRelation" class="form-label">Family Relation :</label>
+                                <input type="text" class="form-control" id="familyRelation">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="parentCareEmail" class="form-label">Guardian's Email :</label>
+                                <input type="email" class="form-control" id="parentCareEmail">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="parentCareMobileNumber" class="form-label">Guardian's Mobile Number :</label>
+                                <input type="tel" class="form-control" id="parentCareMobileNumber" pattern="[0-9]{8,15}" title="Please enter a valid phone number (8-15 digits)">
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label for="parentCareEducation" class="form-label">Guardian's Education :</label>
+                                <select class="form-select" id="parentCareEducation">
+                                    <option value="" disabled selected>Select Education</option>
+                                    <option>Elementary School</option>
+                                    <option>Junior High School</option>
+                                    <option>Senior High School</option>
+                                    <option>Bachelor's Degree</option>
+                                    <option>Master's Degree</option>
+                                    <option>Doctorate Degree</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="parentCareReligion" class="form-label">Guardian's Religion :</label>
+                                <select class="form-select" id="parentCareReligion">
+                                    <option value="" disabled selected>Select Religion</option>
+                                    <option value="Advent">Adventist</option>
+                                    <option value="Islam">Islam</option>
+                                    <option value="Kristen Protestan">Protestant Christian</option>
+                                    <option value="Kristen Katolik">Catholic Christian</option>
+                                    <option value="Hindu">Hindu</option>
+                                    <option value="Buddha">Buddhist</option>
+                                    <option value="Konghucu">Confucian</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="declarationCheck" required>
+                        <label class="form-check-label" for="declarationCheck">
+                            I declare that all information on this New Student Registration Form is complete and correct.
+                            All contents of this form are submitted to Klabat University and Klabat University is not obliged to return them.
+                        </label>
+                        <div class="invalid-feedback">
+                            You must agree to the declaration before registering.
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label for="airmadidiDate" class="form-label">Airmadidi, dd/mm/yyyy</label>
+                            <input type="text" class="form-control date-picker" id="airmadidiDate" placeholder="dd/mm/yyyy" required>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-start">
+                        <button type="reset" class="btn btn-secondary me-2" id="resetButton">Reset Form</button>
+                        <button type="submit" class="btn btn-primary" id="registerButton">Register</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="schedule-content" class="content-section">
+                <h2>My Schedule</h2>
+                <p>Content for View Schedule goes here.</p>
+                <div class="info-box siu-green">
+                    <h4>Jadwal Kuliah</h4>
+                    <p>Jadwal perkuliahan semester ini akan segera tersedia.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Global variable to store flatpickr instances
+        let datePickersInitialized = false;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarLinks = document.querySelectorAll('.sidebar ul li a');
+            const contentSections = document.querySelectorAll('.content-section');
+            const registrationForm = document.getElementById('registrationForm');
+
+            function showContent(contentId) {
+                // Sembunyikan semua section
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+
+                // Tampilkan section yang diminta
+                const targetSection = document.getElementById(contentId + '-content');
+                if (targetSection) {
+                    targetSection.classList.add('active');
+
+                    // Initialize Flatpickr only when the registration form is shown for the first time
+                    // or if it needs re-initialization. This prevents errors if Flatpickr targets hidden inputs.
+                    if (contentId === 'registration' && !datePickersInitialized) {
+                        flatpickr(".date-picker", {
+                            dateFormat: "d/m/Y", // Mengatur format tanggal menjadi dd/mm/yyyy.
+                            allowInput: true // Memungkinkan pengguna untuk mengetik tanggal secara manual.
+                        });
+                        datePickersInitialized = true; // Mark as initialized
+                    }
+                }
+
+                // Hapus kelas 'active' dari semua tautan sidebar
+                sidebarLinks.forEach(link => {
+                    link.classList.remove('active');
+                });
+
+                // Tambahkan kelas 'active' ke tautan yang diklik
+                const activeLink = document.querySelector(`.sidebar ul li a[data-content="${contentId}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            }
+
+            // Tambahkan event listener untuk setiap tautan sidebar
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault(); // Mencegah browser melompat ke bagian atas halaman
+                    const contentId = this.dataset.content; // Ambil nilai dari data-content
+                    showContent(contentId);
+                });
+            });
+
+            // Tampilkan konten 'home' secara default saat halaman dimuat
+            showContent('home');
+
+            // --- JavaScript for Registration Form ---
+
+            // Menangani klik tombol "Register" dengan SweetAlert2 untuk konfirmasi.
+            document.getElementById('registerButton').addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Perform HTML5 form validation
+                if (!registrationForm.checkValidity()) {
+                    // If the form is invalid, trigger Bootstrap's validation styles
+                    registrationForm.classList.add('was-validated');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Validation Error',
+                        text: 'Please fill in all required fields and correct any errors.',
+                    });
+                    return; // Stop the function if validation fails
+                }
+
+                Swal.fire({
+                    title: 'Form Submission',
+                    text: 'Are you sure you want to register?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Register!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                            'Registered!',
+                            'Your registration has been submitted successfully.',
+                            'success'
+                        );
+                        // Optionally reset the form after successful submission
+                        registrationForm.reset();
+                        // Remove validation classes if reset
+                        registrationForm.classList.remove('was-validated');
+                    }
+                });
+            });
+
+            // Menangani klik tombol "Reset Form" dengan SweetAlert2 untuk konfirmasi.
+            document.getElementById('resetButton').addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default form reset
+
+                Swal.fire({
+                    title: 'Reset Form',
+                    text: 'Are you sure you want to reset the form? All entered data will be cleared.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Reset!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        registrationForm.reset();
+                        // Remove validation classes after reset
+                        registrationForm.classList.remove('was-validated');
+                        Swal.fire(
+                            'Form Reset!',
+                            'The form has been cleared.',
+                            'info'
+                        );
+                    }
+                });
+            });
+
+            // Logika untuk memindahkan fokus secara otomatis antar input digit nomor pendaftaran.
+            const regDigitInputs = document.querySelectorAll('.registration-digit-input');
+            regDigitInputs.forEach((input, index) => {
+                input.addEventListener('input', function() {
+                    // Ensure only digits are entered
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                    if (this.value.length === this.maxLength && index < regDigitInputs.length - 1) {
+                        regDigitInputs[index + 1].focus();
+                    }
+                });
+
+                input.addEventListener('keydown', function(event) {
+                    if (event.key === 'Backspace' && this.value.length === 0 && index > 0) {
+                        regDigitInputs[index - 1].focus();
+                    }
+                });
+            });
+
+            // Handle invalid state for the declaration checkbox
+            const declarationCheck = document.getElementById('declarationCheck');
+            declarationCheck.addEventListener('invalid', function() {
+                this.classList.add('is-invalid');
+            });
+            declarationCheck.addEventListener('change', function() {
+                if (this.checked) {
+                    this.classList.remove('is-invalid');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
